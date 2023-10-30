@@ -5,7 +5,7 @@ from pydantic import BaseModel
 import pickle
 
 app = FastAPI()
-model_predict = pickle.load(open("app/train-model/model.pkl", "rb"))
+modelo_regresion = pickle.load(open("app/modelo_regresion/model.pkl", "rb"))
 
 
 class Model(BaseModel):
@@ -15,28 +15,17 @@ class Model(BaseModel):
 
 @app.get("/")
 def main():
-    return "Bienvenido to Machine Learning FastAPI"
+    return "Bienvenido a FastAPI Sueldos"
 
-# Request body
-@app.post("/api/")
-def model(data: Model):
-    # Import the saved model
-    input_data = pd.DataFrame({'Años': [data.Años],'Años_de_experiencia': [data.Años_de_experiencia], 'Cargo': [data.Cargo]})
-
-    
-    user_salary = model_predict.predict(input_data)
-
-    return {"Sueldo": int(user_salary[0])}
-
-
-# Query parameters
+# Parametros
 @app.get("/api/")
 def model(Años:float,Años_de_experiencia:float,Cargo:str):
-    # Import the saved model
-    input_data = pd.DataFrame({'Años': [Años],'Años_de_experiencia': [Años_de_experiencia], 'Cargo': [Cargo]})
+    # Se importa el modelo de regresion
+    data = pd.DataFrame({'Años': [Años],'Años_de_experiencia': [Años_de_experiencia], 'Cargo': [Cargo]})
 
     
-    user_salary = model_predict.predict(input_data)
-
-    return {"Sueldo": int(user_salary[0])}
+    sueldo = modelo_regresion.predict(data)
+    sueldo= "${:,.2f}".format(int(sueldo[0]))
+    
+    return {"Sueldo": sueldo}
 
