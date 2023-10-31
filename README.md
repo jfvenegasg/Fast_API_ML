@@ -25,6 +25,7 @@ El siguiente proyecto considera como archivos y elementos principales,el archivo
     - 📁 modelo_regresion
       - 📄 modelo.pkl
       - 📄 regression_model.ipynb
+      - 📄 modelo.py
       - 💹 Renta.csv
 
       
