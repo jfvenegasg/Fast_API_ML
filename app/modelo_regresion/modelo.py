@@ -19,6 +19,9 @@ y =df.loc[:, ['Sueldo']]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size= 0.2, random_state=2)
 
+y_train=np.ravel(y_train)
+y_test=np.ravel(y_test)
+
 #Codificacion de variable categorica
 preprocessor = ColumnTransformer(
     transformers=[
@@ -28,13 +31,22 @@ preprocessor = ColumnTransformer(
 )
 
 # Entrenamiento del modelo
-modelo = Pipeline([
+modelo_1 = Pipeline([
     ('preprocessor', preprocessor),
     ('regressor', LinearRegression())
 ])
-modelo.fit(X_train, y_train)
 
-y_pred = modelo.predict(X_test)
+modelo_2 = Pipeline([
+    ('preprocessor', preprocessor),
+    ('regressor', MLPRegressor(solver="lbfgs",max_iter=5000,hidden_layer_sizes=(30,30)))
+])
+
+
+modelo_1.fit(X_train, y_train)
+modelo_2.fit(X_train, y_train)
+
+y_pred_1 = modelo_1.predict(X_test)
+y_pred_2 = modelo_2.predict(X_test)
 
 #Visualización de datos de entrenamiento
 plt.figure(figsize=(12, 6))
@@ -79,13 +91,20 @@ plt.tight_layout()
 plt.show()
 
 #Score del modelo de regresion multiple
-modelo.score(X_test, y_test)
+print(modelo_1.score(X_test, y_test),modelo_2.score(X_test, y_test))
+
 
 #Guardamos el modelo
-pickle.dump(modelo, open('app/modelo_regresion/model.pkl','wb'))
+pickle.dump(modelo_1, open('modelo_1.pkl','wb'))
 
 #Importamos el modelo guardado
-modelo = pickle.load(open('app/modelo_regresion/model.pkl','rb'))
+modelo_1 = pickle.load(open('modelo_1.pkl','rb'))
+
+#Guardamos el modelo
+pickle.dump(modelo_2, open('modelo_2.pkl','wb'))
+
+#Importamos el modelo guardado
+modelo_2 = pickle.load(open('modelo_2.pkl','rb'))
 
 #Input para ingresar la edad,experiencia y cargo
 experiencia = float(input('Ingrese el valor de Años de experiencia: '))
@@ -96,8 +115,11 @@ cargo = input('Ingrese el Cargo: ')
 data = pd.DataFrame({'Años': [edad],'Años_de_experiencia': [experiencia], 'Cargo': [cargo]})
 
 #Predicción del sueldo.
-sueldo = modelo.predict(data)
+sueldo_1 = modelo_1.predict(data)
+sueldo_2 = modelo_2.predict(data)
 
 #Se redondea la prediccion del sueldo
-sueldo= "${:,.2f}".format(int(sueldo[0]))
-sueldo
+sueldo_1= int(sueldo_1[0])
+sueldo_2= int(sueldo_2[0])
+
+print("sueldo 1",sueldo_1,"sueldo 2",sueldo_2)
