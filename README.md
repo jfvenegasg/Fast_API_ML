@@ -104,14 +104,14 @@ docker tag api_sueldos:latest southamerica-west1-docker.pkg.dev/driven-saga-4039
 Una vez etiquetada la imagen,le podemos dar a push a la imagen con la siguiente linea
 
 ``` dockerfile
-docker tag api_sueldos:latest southamerica-west1-docker.pkg.dev/driven-saga-403916/docker-repo/api_sueldos:latest
+docker push southamerica-west1-docker.pkg.dev/driven-saga-403916/docker-repo/api_sueldos:latest
 ```
 
 Si la imagen fue cargada correctamente la podremos ver en el repositorio de Artifact Registry como se ve en la imagen.
 
 ![imagen en el repo docker](image_repo_docker.png)
 
-Como podemos ver en la imagen,ya tenemos la imagen de nuestra API.De esta forma ahora la podemos desplegar con el servicio Cloud Run.
+Como podemos ver en la imagen,tenemos 3 imagenes.En este caso la que utilizaremos es la imagen **api_sueldos**,las otras 2 corresponden a otras apps que subi anteriormente.
 
 ## Desplegar con Cloud Run
 
@@ -135,15 +135,14 @@ Finalmente si queremos acceder al servicio,podemos entrar al URL que se nos mues
 
 Se los dejo a continuación.
 
-<https://shiny-app-vvrixyvk3q-uc.a.run.app>
+<https://api-sueldos-vvrixyvk3q-uc.a.run.app/docs>
 
 Aca se una vista de la API Sueldos.
 
-![Shiny app desplegada](cloud_run_3.png)
+![API sueldos desplegada](cloud_run_3.png)
 
 
-## API Sueldos
+Esta es una api que permite determinar los sueldos en tecnologia mediante 2 endpoints y de acuerdo a 3 variables de entrada.La primera variable es **Años**,que corresponde a la edad de la persona,la segunda variable es **Años de experiencia** que corresponde a los años de experiencia laboral y finalmente la variable **Cargo**,que en este momento solo tiene la opcion de 3 tipos de cargos:Data Engineer,Arquitecto de datos y Full- Stack.
 
-Esta es una api que permite determinar los sueldos en tecnologia de acuerdo a 3 variables de entrada.La primera variable es **Años**,que corresponde a la edad de la persona,la segunda variable es **Años de experiencia** que corresponde a los años de experiencia laboral y finalmente la variable **Cargo**,que en este momento solo tiene la opcion de 3 tipos de cargos:Data Engineer,Arquitecto de datos y Full- Stack.
+Si bien las estimaciones que realiza cada modelo son distintas,esto se debe a la arquitectura de cada modelo,pero ademas junto al sueldo estimado se muestra el score de entrenamiento de cada modelo.
 
-![API sueldos](api_1.png)
