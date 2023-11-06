@@ -122,4 +122,6 @@ sueldo_2 = modelo_2.predict(data)
 sueldo_1= int(sueldo_1[0])
 sueldo_2= int(sueldo_2[0])
 
+score_1=modelo_1.score(data,sueldo_1)
+
 print("sueldo 1",sueldo_1,"sueldo 2",sueldo_2)

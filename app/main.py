@@ -6,7 +6,10 @@ import pickle
 
 app = FastAPI()
 modelo_regresion = pickle.load(open("app/modelo_regresion/modelo_1.pkl", "rb"))
+score_regresion = pickle.load(open("app/modelo_regresion/score_1.pkl", "rb"))
+
 modelo_red_neuronal = pickle.load(open("app/modelo_regresion/modelo_2.pkl", "rb"))
+score_red_neuronal = pickle.load(open("app/modelo_regresion/score_2.pkl", "rb"))
 
 
 class Model(BaseModel):
@@ -27,8 +30,9 @@ def model_1(Años:float,Años_de_experiencia:float,Cargo:str):
     
     sueldo = modelo_regresion.predict(data)
     sueldo= "${:,.2f}".format(int(sueldo[0]))
-    
-    return {"Sueldo": sueldo}
+    score_1=score_regresion
+
+    return {"El Sueldo es": sueldo, "El score es de": "{:,.2f}".format(score_1)}
 
 @app.get("/Red Neuronal")
 def model_2(Años:float,Años_de_experiencia:float,Cargo:str):
@@ -37,6 +41,7 @@ def model_2(Años:float,Años_de_experiencia:float,Cargo:str):
 
     
     sueldo = modelo_red_neuronal.predict(data)
-    sueldo= "${:,.2f}".format(int(sueldo[0]))
+    sueldo= "{:,.2f}".format(int(sueldo[0]))
+    score_2=score_red_neuronal
     
-    return {"Sueldo": sueldo}
+    return {"El Sueldo es": sueldo, "El score es de": "{:,.2f}".format(score_2)}
